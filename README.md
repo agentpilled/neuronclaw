@@ -72,9 +72,21 @@ Most skill systems drown in low-quality entries. NeuronClaw prevents this:
 
 ## Installation
 
-### From GitHub
+### One-liner (recommended)
 
-Add to your `skills-lock.json`:
+```bash
+git clone https://github.com/agentpilled/neuronclaw.git ~/.agents/skills/neuronclaw
+```
+
+That's it. Your agent will detect the skill on the next session.
+
+> **Where to clone?** OpenClaw scans these directories for skills:
+> `~/.agents/skills/`, `~/.claude/skills/`, `~/.codex/skills/`.
+> Pick whichever matches your setup.
+
+### Via skills-lock.json
+
+If your project uses a `skills-lock.json` manifest, add:
 
 ```json
 {
@@ -85,11 +97,12 @@ Add to your `skills-lock.json`:
 }
 ```
 
-### Manual
+### Via Paperclip / AgentSquad API
 
 ```bash
-git clone https://github.com/agentpilled/neuronclaw.git
-cp -r neuronclaw/ ~/.agents/skills/neuronclaw/
+curl -X POST "$API_URL/api/companies/$COMPANY_ID/skills/import" \
+  -H "Content-Type: application/json" \
+  -d '{"source": "agentpilled/neuronclaw"}'
 ```
 
 ### First Run
@@ -99,14 +112,16 @@ activates — creating its directory structure at `$AGENT_HOME/neuronclaw/`.
 
 ## Quick Start
 
-1. **Install NeuronClaw** using one of the methods above
-2. **Do complex work** — solve a multi-step problem, debug a tricky error, build
-   a deployment workflow
-3. **Watch NeuronClaw capture it** — after the task, your agent will evaluate the
-   approach and save it as a draft
-4. **Repeat the pattern** — next time a similar task appears, the draft gets
-   promoted to a real skill
-5. **Check your skills** — ask your agent: *"What skills has NeuronClaw captured?"*
+```
+1. Install            git clone ... ~/.agents/skills/neuronclaw
+2. Do complex work    Solve a multi-step problem, debug a tricky error
+3. NeuronClaw fires   Agent evaluates the task and saves a draft
+4. Pattern repeats    Next time a similar task appears, draft gets promoted
+5. Check your skills  "What skills has NeuronClaw captured?"
+```
+
+**Try it now:** After installing, do some complex work and then ask your agent:
+*"Activate NeuronClaw and evaluate whether that task was skill-worthy."*
 
 ## Storage Layout
 
