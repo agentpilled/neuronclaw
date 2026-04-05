@@ -27,6 +27,33 @@ Before anything else, scan the draft content per [./security.md](./security.md).
 If the scan finds critical issues, do NOT promote. Flag the draft and inform
 the user.
 
+### Step 1.5: Multi-Perspective Review
+
+Evaluate the draft from four angles before promoting:
+
+| Angle | Question | Pass if... |
+|-------|----------|------------|
+| **Security** | Could this skill cause harm if followed blindly? | No critical security findings |
+| **Clarity** | Could a different agent follow these steps without ambiguity? | Steps are imperative, specific, and ordered |
+| **Generalization** | Is this too specific to one context, or reusable? | At least 2 placeholders for variable values |
+| **Maintainability** | Will this skill go stale quickly? | No hardcoded versions, URLs, or transient details |
+
+If any angle scores poorly, patch the draft before promoting (fix the specific
+issue). If the draft can't be fixed (e.g., inherently too specific), skip
+promotion and leave it as a draft.
+
+### Step 1.75: Approval Gate (Optional)
+
+If the user has previously indicated they want manual approval before
+promotions (check `$AGENT_HOME/neuronclaw/config.yaml` for `approval_mode: manual`),
+ask before proceeding:
+
+> "Draft '{title}' is ready for promotion (matched {match_count} times,
+> complexity {complexity}). Promote to skill? [yes/no]"
+
+If the user says no, leave the draft as-is. If `approval_mode` is `auto`
+or not set, skip this step and promote automatically.
+
 ### Step 2: Create the Skill Directory
 
 ```

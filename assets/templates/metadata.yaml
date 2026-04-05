@@ -21,4 +21,12 @@ security_scan:
   info: 0
   passed: false
   notes: ""
+avg_duration_seconds: null
+avg_tool_count: null
 usage_log: []
+# Each usage_log entry should include:
+#   date: "YYYY-MM-DD"
+#   outcome: success | failure | patched
+#   notes: "Brief context"
+#   duration_seconds: 0      # Time the skill execution took
+#   tool_count: 0            # Number of tool calls during execution

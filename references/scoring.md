@@ -24,6 +24,8 @@ usage_log:
   - date: {today}
     outcome: success
     notes: "Brief context"
+    duration_seconds: {elapsed time in seconds}
+    tool_count: {number of tool calls used}
 ```
 
 ### On Failure
@@ -38,7 +40,20 @@ usage_log:
   - date: {today}
     outcome: failure
     notes: "What went wrong and why"
+    duration_seconds: {elapsed time in seconds}
+    tool_count: {number of tool calls used}
 ```
+
+### Updating Averages
+
+After each usage log entry, recompute:
+```yaml
+avg_duration_seconds: {average of all usage_log duration_seconds}
+avg_tool_count: {average of all usage_log tool_count}
+```
+
+These averages help identify skills that are getting slower (potential drift)
+or more efficient (improved steps) over time.
 
 ### On Patch
 

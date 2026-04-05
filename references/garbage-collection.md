@@ -115,11 +115,60 @@ Before archiving any skill, check if other skills reference it:
 Keep the last 10 GC reports. When creating report #11, delete the oldest.
 Reports are for audit trail, not permanent record.
 
+## Adaptive Thresholds
+
+Default thresholds (draft expiry: 30d, stable→deprecated: 60d, etc.) are
+starting points. During each GC run, analyze actual usage patterns and adjust:
+
+### How to Adapt
+
+1. **Draft promotion speed:** Look at all promoted drafts. If the median time
+   from draft creation to promotion is 5 days (not 30), lower the expiry to
+   3x the median (15 days). Formula:
+   ```
+   new_draft_expiry = max(7, median_promotion_days * 3)
+   ```
+
+2. **Skill usage frequency:** If the median time between skill uses is 14 days,
+   the 60-day stable→deprecated threshold is generous. Adjust to:
+   ```
+   new_stable_expiry = max(30, median_usage_gap * 4)
+   ```
+
+3. **Quality threshold:** If most skills score above 0.6, the 0.3 archive
+   threshold is too lenient. Adjust to:
+   ```
+   new_quality_threshold = max(0.2, median_quality * 0.5)
+   ```
+
+### Where to Store Adapted Values
+
+Write adapted thresholds to `$AGENT_HOME/neuronclaw/config.yaml`:
+```yaml
+thresholds:
+  draft_expiry_days: 15        # default: 30
+  stable_expiry_days: 45       # default: 60
+  quality_archive_threshold: 0.35  # default: 0.3
+  last_adapted: "YYYY-MM-DD"
+```
+
+If `config.yaml` doesn't exist, use defaults. The agent updates it during GC.
+
+### Guardrails
+
+- Never set `draft_expiry_days` below 7 (need at least a week to re-encounter)
+- Never set `stable_expiry_days` below 30 (skills need breathing room)
+- Never set `quality_archive_threshold` above 0.5 (too aggressive)
+- Include `last_adapted` date to prevent adjusting every GC run
+- Only adapt if there are at least 5 data points (promoted drafts or skill uses)
+
 ## Manual Overrides
 
 The user can always:
 - Manually archive any skill: "Archive the {name} skill"
 - Manually restore from archive: "Restore {name} from NeuronClaw archive"
 - Skip GC for specific skills: "Keep {name} even though it's unused"
+- Override thresholds: "Set draft expiry to 14 days"
 
-User instructions always take precedence over GC automation.
+User instructions always take precedence over GC automation and adaptive
+thresholds.

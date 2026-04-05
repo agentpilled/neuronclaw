@@ -8,7 +8,27 @@ description: >
   reviewing skill health, or when a skill produces wrong results during use.
 metadata:
   tags: self-improvement, skill-creation, meta-learning, automation, lifecycle
-  version: 1.0.0
+  version: 1.1.0
+  prerequisites:
+    required:
+      - name: qmd
+        check: "which qmd"
+        install: "See https://docs.openclaw.ai/tools/qmd for installation"
+        reason: "Semantic search for draft/skill matching and consolidation"
+      - name: file_read
+        check: "Built-in OpenClaw tool"
+        reason: "Reading drafts, skills, and metadata files"
+      - name: file_write
+        check: "Built-in OpenClaw tool"
+        reason: "Creating drafts, skills, and metadata files"
+    optional:
+      - name: cron
+        check: "Built-in OpenClaw tool"
+        install: "Enable in OpenClaw gateway config"
+        reason: "Automated weekly garbage collection"
+      - name: shell
+        check: "Built-in OpenClaw tool"
+        reason: "Running commands referenced in generated skills"
 ---
 
 # NeuronClaw
@@ -84,6 +104,35 @@ the skill before execution.
 **Action:** Load [./references/scoring.md](./references/scoring.md) to compute
 and report quality scores.
 
+### 7. Before starting a complex task (Proactive Matching)
+
+**Trigger:** You are about to start a task that looks complex (multi-step,
+involves tools you've used before, or the user describes a familiar workflow).
+
+**Action:** Before doing the work, search `$AGENT_HOME/neuronclaw/skills/` and
+`$AGENT_HOME/neuronclaw/drafts/` with `qmd` using keywords from the task. If a
+matching skill exists, load and follow it. If a matching draft exists, use it as
+guidance (and increment its `match_count`).
+
+This is the "look before you leap" trigger — check if you already know how to
+do something before figuring it out from scratch.
+
+### 8. When the user wants to try a different approach
+
+**Trigger:** The user says "try it differently", "use X instead of Y", "fork
+this skill", or wants to experiment with a variant approach for a task covered
+by an existing skill.
+
+**Action:** Load [./references/forking.md](./references/forking.md) to create
+a variant skill without modifying the original.
+
+### 9. When a skill references another skill as a sub-step
+
+**Trigger:** You encounter `→ Use skill: {name}` in a skill's procedure.
+
+**Action:** Load [./references/composability.md](./references/composability.md)
+for the sub-skill execution protocol.
+
 ## Scope Guard
 
 Do NOT create drafts for:
@@ -128,7 +177,9 @@ patch_count: 0
 consecutive_successes: 0
 consecutive_failures: 0
 tags: []
-usage_log: []
+avg_duration_seconds: null
+avg_tool_count: null
+usage_log: []          # entries include: date, outcome, notes, duration_seconds, tool_count
 ```
 
 ### Quality score (compute on demand, never cache)
@@ -155,10 +206,29 @@ deprecated ──[unused 30 more days]──────────────
 
 ## Initialization
 
-On first activation, if `$AGENT_HOME/neuronclaw/` does not exist:
+On first activation, run these checks in order. If any check fails, give the
+user the exact command to fix it before proceeding.
 
+### Step 1: Check prerequisites
+
+For each tool in `prerequisites.required`:
+1. Run the `check` command
+2. If it fails, show: "NeuronClaw requires {name} — {reason}. Install: {install}"
+3. Stop here until all required tools are available
+
+For each tool in `prerequisites.optional`:
+1. Run the `check` command
+2. If it fails, note it but continue: "Optional: {name} not found — {reason}. Install: {install}"
+
+### Step 2: Create directory structure
+
+If `$AGENT_HOME/neuronclaw/` does not exist:
 1. Create the full directory tree shown in Storage Layout
-2. Confirm to the user: "NeuronClaw initialized at $AGENT_HOME/neuronclaw/"
-3. Optionally offer to schedule weekly GC via cron
+2. Confirm: "NeuronClaw initialized at $AGENT_HOME/neuronclaw/"
+
+### Step 3: Offer optional setup
+
+- If `cron` is available: offer to schedule weekly GC
+- Show a one-line summary: "NeuronClaw ready. {n} prerequisites OK, {n} optional missing."
 
 After initialization, proceed with the triggered action.

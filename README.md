@@ -62,9 +62,15 @@ Most skill systems drown in low-quality entries. NeuronClaw prevents this:
 
 - **Autonomous skill creation** from complex task completions
 - **Draft-before-promote pipeline** prevents skill bloat
+- **Proactive skill matching** — checks for existing skills *before* starting a task
 - **Self-healing** — broken skills are patched during use, not after
-- **Quality scoring** with weighted formula (success rate, frequency, recency)
-- **Garbage collection** archives stale skills, merges similar ones
+- **Multi-perspective review** — evaluates security, clarity, generalization, and maintainability before promoting
+- **Quality scoring** with weighted formula (success rate, frequency, recency) plus duration and tool count tracking
+- **Skill forking** — experiment with variant approaches without touching proven originals
+- **Composable skills** — skills can reference other skills as sub-steps
+- **Adaptive thresholds** — GC auto-tunes expiry and quality thresholds based on actual usage patterns
+- **Optional approval gates** — require user confirmation before promoting drafts
+- **Garbage collection** — archives stale skills, merges similar ones, consolidates duplicates
 - **Security scanner** catches data exfiltration, destructive commands, credential
   harvesting, prompt injection, and privilege escalation
 - **Zero dependencies** — pure markdown, uses only OpenClaw's built-in tools
@@ -162,11 +168,17 @@ Skills with critical findings are blocked. Warnings are flagged for human review
 |---------|-----------|-------------|-----------------|
 | Autonomous skill creation | Yes | Yes | No |
 | Draft-before-promote | Yes | No | N/A |
+| Proactive skill matching | Yes | No | No |
 | Self-patching | Yes | Yes | No |
+| Multi-perspective review | Yes | No | No |
 | Security scanning | Yes | Yes | No |
-| Quality scoring | Yes | No | No |
+| Quality scoring + metrics | Yes | No | No |
+| Skill forking | Yes | No | No |
+| Composable skills | Yes | No | No |
+| Adaptive thresholds | Yes | No | No |
 | Garbage collection | Yes | No | No |
 | Skill consolidation | Yes | No | No |
+| Approval gates | Yes (optional) | No | No |
 | RL training pipeline | No | Yes | No |
 | Pure markdown (no runtime) | Yes | No (Python) | N/A |
 
@@ -179,9 +191,12 @@ documented in the reference files and can be adjusted by editing:
 |---------|---------|-------|
 | Min complexity for drafts | 4 | `rules/complexity-triggers.md` |
 | Matches needed for promotion | 2 | `references/promotion.md` |
-| Draft expiry | 30 days | `references/garbage-collection.md` |
-| Stable→deprecated threshold | 60 days | `references/garbage-collection.md` |
-| GC archive score threshold | 0.3 | `references/garbage-collection.md` |
+| Draft expiry | 30 days (adaptive) | `references/garbage-collection.md` |
+| Stable→deprecated threshold | 60 days (adaptive) | `references/garbage-collection.md` |
+| GC archive score threshold | 0.3 (adaptive) | `references/garbage-collection.md` |
+| Promotion approval mode | auto | `references/promotion.md` |
+| Max forks per skill | 2 | `references/forking.md` |
+| Max composability depth | 2 | `references/composability.md` |
 
 ## Documentation
 
