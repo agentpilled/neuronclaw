@@ -33,6 +33,9 @@ Rate the task on a 1–10 complexity scale:
 
 **Minimum threshold: complexity >= 4.** Below this, skip drafting.
 
+For detailed scoring criteria and bonus modifiers, see
+[../rules/complexity-triggers.md](../rules/complexity-triggers.md).
+
 ## Step 2: Reusability Check
 
 Ask yourself:
