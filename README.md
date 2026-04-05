@@ -97,14 +97,6 @@ If your project uses a `skills-lock.json` manifest, add:
 }
 ```
 
-### Via Paperclip / AgentSquad API
-
-```bash
-curl -X POST "$API_URL/api/companies/$COMPANY_ID/skills/import" \
-  -H "Content-Type: application/json" \
-  -d '{"source": "agentpilled/neuronclaw"}'
-```
-
 ### First Run
 
 No setup required. NeuronClaw initializes automatically the first time it
