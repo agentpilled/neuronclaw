@@ -1,0 +1,42 @@
+slug: "deploy-nextjs-flyio"
+status: stable
+promoted_on: "2026-04-01"
+last_used: "2026-04-28"
+use_count: 5
+success_count: 4
+failure_count: 1
+patch_count: 1
+consecutive_successes: 3
+consecutive_failures: 0
+tags: [deployment, fly.io, nextjs, docker, multi-stage]
+platform: [macos, linux]
+required_tools: [shell, file_write]
+required_env: []
+related_skills: []
+security_scan:
+  last_scanned: "2026-04-01"
+  findings_count: 1
+  critical: 0
+  warning: 1
+  info: 0
+  passed: true
+  notes: "Warning: fly deploy command (legitimate deployment tool)"
+usage_log:
+  - date: "2026-04-03"
+    outcome: success
+    notes: "Clean deploy of personal blog, no issues"
+  - date: "2026-04-10"
+    outcome: success
+    notes: "Deployed SaaS app, worked with monorepo structure"
+  - date: "2026-04-15"
+    outcome: failure
+    notes: "Native module (sharp) failed on Alpine — needed node:20-slim"
+  - date: "2026-04-15"
+    outcome: patched
+    notes: "Added caveat about native modules and Alpine vs slim base images"
+  - date: "2026-04-22"
+    outcome: success
+    notes: "Used slim base image per patched instructions, worked perfectly"
+  - date: "2026-04-28"
+    outcome: success
+    notes: "Deployed portfolio site, straightforward"

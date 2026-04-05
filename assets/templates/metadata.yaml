@@ -1,0 +1,24 @@
+slug: "{slug}"
+status: probation
+promoted_on: "YYYY-MM-DD"
+last_used: null
+use_count: 0
+success_count: 0
+failure_count: 0
+patch_count: 0
+consecutive_successes: 0
+consecutive_failures: 0
+tags: []
+platform: []
+required_tools: []
+required_env: []
+related_skills: []
+security_scan:
+  last_scanned: null
+  findings_count: 0
+  critical: 0
+  warning: 0
+  info: 0
+  passed: false
+  notes: ""
+usage_log: []
